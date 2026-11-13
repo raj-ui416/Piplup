@@ -1,0 +1,6 @@
+{
+  "appId": "com.piplup.music",
+  "appName": "Piplup",
+  "webDir": "www",
+  "plugins": { "CapacitorHttp": { "enabled": true } }
+}
