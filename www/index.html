@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Piplup</title>
+<style>
+:root{--base:#fff;--ink:#1b1b22;--accent:#a78bfa;box-sizing:border-box}
+@media (prefers-color-scheme:dark){:root{--base:#131318;--ink:#f2f2f6}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+body{font-family:system-ui,-apple-system,Roboto,sans-serif;color:var(--ink);background:color-mix(in srgb,var(--accent) 13%,var(--base));transition:background .35s;padding-top:env(safe-area-inset-top,0px)}
+button{font:inherit;color:inherit;border:0;cursor:pointer;background:none}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 190px}
+h1{margin:6px 0 2px;font-size:30px;letter-spacing:-.5px}
+h3{margin:22px 0 8px;font-size:17px}
+.sub{opacity:.6;margin:0 0 16px;font-size:14px}
+.top{display:flex;justify-content:space-between;align-items:center}
+.av{width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700}
+.profiles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.pcard{background:color-mix(in srgb,var(--c) 22%,var(--base));border-radius:22px;padding:22px 12px;text-align:center;transition:transform .15s}
+.pcard:active{transform:scale(.96)}
+.pcard .av{width:60px;height:60px;font-size:26px;margin:0 auto 10px;background:var(--c)}
+.add{border:2px dashed color-mix(in srgb,var(--ink) 25%,transparent);border-radius:22px;min-height:120px;opacity:.8}
+.card{background:color-mix(in srgb,var(--accent) 12%,var(--base));border-radius:20px;padding:14px;margin-bottom:12px}
+.search{display:flex;gap:8px}
+input[type=text]{flex:1;min-width:0;padding:14px 16px;border-radius:16px;border:0;background:color-mix(in srgb,var(--accent) 16%,var(--base));color:var(--ink);font:inherit;outline:none}
+.btn{background:var(--accent);color:#fff;padding:13px 18px;border-radius:14px;font-weight:600;display:inline-block}
+.btn.ghost{background:color-mix(in srgb,var(--accent) 20%,var(--base));color:var(--ink)}
+.row{display:flex;align-items:center;gap:12px;padding:8px;border-radius:14px;cursor:pointer;transition:background .15s}
+.row:active,.row.on{background:color-mix(in srgb,var(--accent) 20%,var(--base))}
+.art{width:50px;height:50px;border-radius:12px;background:color-mix(in srgb,var(--accent) 35%,var(--base));flex:none;object-fit:cover;display:grid;place-items:center;font-size:22px}
+.meta{min-width:0;flex:1}
+.meta b,.meta small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta small{opacity:.6;font-size:13px}
+.tag{font-size:11px;padding:3px 8px;border-radius:8px;background:color-mix(in srgb,var(--accent) 22%,var(--base));flex:none}
+.pl{width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;flex:none}
+.nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:color-mix(in srgb,var(--accent) 16%,var(--base));padding:6px 10px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
+.nav button{flex:1;padding:8px;border-radius:14px;font-size:12px;opacity:.65;transition:all .2s}
+.nav button span{display:block;font-size:20px}
+.nav button.on{opacity:1;background:color-mix(in srgb,var(--accent) 28%,var(--base))}
+.mini{position:fixed;left:10px;right:10px;bottom:calc(68px + env(safe-area-inset-bottom,0px));max-width:540px;margin:0 auto;background:color-mix(in srgb,var(--accent) 32%,var(--base));border-radius:20px;padding:8px 10px;display:flex;align-items:center;gap:10px;box-shadow:0 6px 22px rgba(0,0,0,.18);z-index:6}
+.mini .art{width:44px;height:44px}
+.mini .pl{width:42px;height:42px;font-size:16px}
+.sheet{position:fixed;inset:0;background:color-mix(in srgb,var(--accent) 20%,var(--base));z-index:10;padding:calc(20px + env(safe-area-inset-top,0px)) 24px 30px;display:none;flex-direction:column;align-items:center;animation:up .3s ease}
+.sheet.show{display:flex}
+.sheet .big{width:min(78vw,320px);height:min(78vw,320px);border-radius:28px;margin:20px 0;font-size:80px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.sheet h2{margin:0;text-align:center;font-size:22px}
+.ctl{display:flex;align-items:center;justify-content:center;gap:26px;margin-top:14px}
+.ctl button{font-size:28px;padding:8px}
+.ctl .pl{width:68px;height:68px;font-size:26px;padding:0}
+input[type=range]{width:100%;accent-color:var(--accent);margin-top:18px}
+.tm{display:flex;justify-content:space-between;width:100%;font-size:12px;opacity:.6}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;place-items:center;padding:20px;z-index:20}
+.modal.show{display:grid}
+.pop{background:var(--base);border-radius:26px;padding:28px 22px;max-width:340px;width:100%;text-align:center;animation:up .3s ease}
+.pop h2{margin:6px 0;font-size:26px;color:var(--accent)}
+.pop input[type=text]{width:100%;margin-bottom:12px;flex:none}
+@keyframes up{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
+.hide{display:none!important}
+.empty{opacity:.6;text-align:center;padding:18px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<div class="mini hide" id="mini">
+  <div class="art" id="mart" onclick="sheet(1)">🎵</div>
+  <div class="meta" onclick="sheet(1)"><b id="mt">-</b><small id="ma"></small></div>
+  <button class="pl" onclick="step(-1)">⏮</button>
+  <button class="pl" id="mpp" onclick="toggle()">▶</button>
+  <button class="pl" onclick="step(1)">⏭</button>
+</div>
+<div class="nav hide" id="nav">
+  <button data-t="home"><span>🏠</span>Home</button>
+  <button data-t="search"><span>🔎</span>Search</button>
+  <button data-t="device"><span>📁</span>Device</button>
+</div>
+
+<div class="sheet" id="sheet">
+  <button onclick="sheet(0)" style="align-self:flex-start;font-size:26px">⌄</button>
+  <div class="art big" id="bart">🎵</div>
+  <h2 id="bt">-</h2><p class="sub" id="ba"></p>
+  <input type="range" id="seek" min="0" max="1000" value="0">
+  <div class="tm"><span id="tc">0:00</span><span id="td">0:00</span></div>
+  <div class="ctl"><button onclick="step(-1)">⏮</button><button class="pl" id="bpp" onclick="toggle()">▶</button><button onclick="step(1)">⏭</button></div>
+</div>
+
+<div class="modal" id="greet"><div class="pop"><div style="font-size:46px">🎶</div><h2 id="g1"></h2><p id="g2" style="margin:6px 0 18px;opacity:.75"></p><button class="btn" id="gok">Chalo shuru karein</button></div></div>
+<div class="modal" id="addm"><div class="pop"><h2>New profile</h2><input type="text" id="nn" placeholder="Name" maxlength="20">
+  <div style="display:flex;gap:10px;align-items:center;justify-content:center;margin-bottom:16px"><span>Color</span><input type="color" id="nc" value="#14b8a6" style="width:56px;height:40px;border:0;background:none"></div>
+  <button class="btn" id="nsave">Save</button> <button class="btn ghost" id="ncancel">Cancel</button></div></div>
+<audio id="au" preload="metadata"></audio>
+
+<script>
+var DEF=[{n:"Akshara",c:"#a78bfa",k:"a"},{n:"Vedika",c:"#ec4899",k:"v"},{n:"Alex",c:"#6b7280",k:"x"}];
+var profiles=DEF.slice(),cur=null,tab="home",queue=[],idx=-1,results=[],dev=[],searching="";
+var $=function(i){return document.getElementById(i)},au=$("au"),root=document.documentElement;
+try{var ex=JSON.parse(localStorage.getItem("piplup_extra")||"[]");if(Array.isArray(ex))profiles=DEF.concat(ex)}catch(e){}
+function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function part(){var h=new Date().getHours();return h<12?"Good morning":h<17?"Good afternoon":"Good evening"}
+function fmt(s){if(!isFinite(s))return"0:00";s=Math.floor(s);return Math.floor(s/60)+":"+("0"+s%60).slice(-2)}
+function recKey(){return"piplup_rec_"+cur.n}
+function getRec(){try{return JSON.parse(localStorage.getItem(recKey())||"[]")}catch(e){return[]}}
+function addRec(t){if(t.src!=="online")return;var r=getRec().filter(function(x){return x.id!==t.id});r.unshift(t);try{localStorage.setItem(recKey(),JSON.stringify(r.slice(0,25)))}catch(e){}}
+function artHtml(t,cls){return t&&t.art?'<img class="art '+(cls||"")+'" src="'+esc(t.art)+'" alt="">':'<div class="art '+(cls||"")+'">🎵</div>'}
+
+function pick(){
+  cur=null;root.style.setProperty("--accent","#a78bfa");$("nav").classList.add("hide");
+  $("app").innerHTML='<h1>🐧 Piplup</h1><p class="sub">Kaun sun raha hai aaj?</p><div class="profiles">'+
+  profiles.map(function(p,i){return'<button class="pcard" style="--c:'+p.c+'" data-i="'+i+'"><div class="av">'+esc(p.n[0].toUpperCase())+'</div><b>'+esc(p.n)+'</b></button>'}).join("")+
+  '<button class="add" id="addb">＋ Add profile</button></div>';
+  document.querySelectorAll(".pcard").forEach(function(b){b.onclick=function(){openP(+b.dataset.i)}});
+  $("addb").onclick=function(){$("addm").classList.add("show")};
+  if(queue.length)$("mini").classList.remove("hide");
+}
+function openP(i){
+  cur=profiles[i];root.style.setProperty("--accent",cur.c);
+  $("g1").textContent=cur.k==="a"?"Welcome Taisaheb":cur.k==="v"?"Welcome Maharani ji":cur.k==="x"?"The creator of this app":"Welcome "+cur.n;
+  $("g2").textContent=part()+(cur.k==="x"?", "+cur.n:"");
+  $("greet").classList.add("show");$("nav").classList.remove("hide");tab="home";show();
+}
+function show(){
+  document.querySelectorAll(".nav button").forEach(function(b){b.classList.toggle("on",b.dataset.t===tab)});
+  var h='<div class="top"><div><h1>🐧 Piplup</h1><p class="sub">'+esc(cur.n)+' ka music</p></div><button class="av" id="sw" title="Profile badlo">'+esc(cur.n[0].toUpperCase())+'</button></div>';
+  if(tab==="home")h+=homeH();else if(tab==="search")h+=searchH();else h+=devH();
+  $("app").innerHTML=h;$("sw").onclick=pick;bindRows();
+  if(tab==="search"){var q=$("q");q.onkeydown=function(e){if(e.key==="Enter")doSearch()};$("go").onclick=doSearch}
+  if(tab==="device")$("f").onchange=function(e){Array.prototype.forEach.call(e.target.files,function(f){dev.push({id:"d"+Date.now()+f.name,name:f.name.replace(/\.[^.]+$/,""),artist:"Device",url:URL.createObjectURL(f),src:"device"})});show()};
+}
+function rowH(t,i,lst){return'<div class="row'+(queue[idx]&&queue[idx].id===t.id?" on":"")+'" data-l="'+lst+'" data-i="'+i+'">'+artHtml(t)+'<div class="meta"><b>'+esc(t.name)+'</b><small>'+esc(t.artist)+'</small></div>'+(t.tag?'<span class="tag">'+esc(t.tag)+'</span>':'')+'<span class="pl" style="display:grid;place-items:center">▶</span></div>'}
+function homeH(){var r=getRec();
+  return'<h3>🕘 Recents</h3>'+(r.length?'<div class="card">'+r.map(function(t,i){return rowH(t,i,"rec")}).join("")+'</div>':'<div class="card empty">Jo gaane aap online chalaoge wo yahan aayenge.</div>')+
+  '<button class="btn" onclick="go(\'search\')">🔎 Gaana dhundo</button> <button class="btn ghost" onclick="go(\'device\')">📁 Device files</button>'}
+function searchH(){
+  return'<div class="search"><input type="text" id="q" placeholder="Song ya artist ka naam" value="'+esc(searching)+'"><button class="btn" id="go">Search</button></div><div id="res" style="margin-top:14px">'+resH()+'</div>'}
+function resH(){return results.length?'<div class="card">'+results.map(function(t,i){return rowH(t,i,"res")}).join("")+'</div>':'<div class="empty">Naam likho aur Search dabao</div>'}
+function devH(){return'<label class="btn" for="f">＋ Songs choose karo</label><input type="file" id="f" accept="audio/*" multiple class="hide"><div style="margin-top:14px">'+
+  (dev.length?'<div class="card">'+dev.map(function(t,i){return rowH(t,i,"dev")}).join("")+'</div>':'<div class="empty">Abhi koi song nahi</div>')+'</div>'}
+function go(t){tab=t;show()}
+function bindRows(){document.querySelectorAll(".row").forEach(function(r){r.onclick=function(){
+  var l=r.dataset.l,i=+r.dataset.i,list=l==="rec"?getRec():l==="res"?results:dev;queue=list.slice();play(i)}})}
+
+async function doSearch(){
+  var q=$("q").value.trim();if(!q)return;searching=q;$("res").innerHTML='<div class="empty">Dhundh raha hoon…</div>';
+  var out=[];
+  try{var r=await fetch("https://discoveryprovider.audius.co/v1/tracks/search?app_name=piplup&limit=12&query="+encodeURIComponent(q));var j=await r.json();
+    (j.data||[]).forEach(function(t){out.push({id:"au"+t.id,name:t.title,artist:t.user&&t.user.name,art:t.artwork&&(t.artwork["150x150"]||t.artwork["480x480"]),url:"https://discoveryprovider.audius.co/v1/tracks/"+t.id+"/stream?app_name=piplup",src:"online",tag:"Full"})})}catch(e){}
+  try{var r2=await fetch("https://itunes.apple.com/search?media=music&entity=song&limit=15&term="+encodeURIComponent(q));var j2=await r2.json();
+    (j2.results||[]).forEach(function(t){if(t.previewUrl)out.push({id:"it"+t.trackId,name:t.trackName,artist:t.artistName,art:t.artworkUrl100,url:t.previewUrl,src:"online",tag:"30s"})})}catch(e){}
+  results=out;$("res").innerHTML=out.length?resH():'<div class="empty">Kuch nahi mila ya internet check karo</div>';bindRows();
+}
+
+function play(i){
+  var t=queue[i];if(!t)return;idx=i;au.src=t.url;au.play().catch(function(){});addRec(t);
+  $("mini").classList.remove("hide");
+  $("mt").textContent=$("bt").textContent=t.name;$("ma").textContent=$("ba").textContent=t.artist||"";
+  $("mart").outerHTML='<div class="art" id="mart" onclick="sheet(1)">🎵</div>';$("bart").outerHTML='<div class="art big" id="bart">🎵</div>';
+  if(t.art){$("mart").innerHTML='<img src="'+esc(t.art)+'" class="art" alt="">';$("bart").innerHTML='<img src="'+esc(t.art)+'" class="art big" alt="">'}
+  if("mediaSession" in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:t.name,artist:t.artist||"Piplup",artwork:t.art?[{src:t.art,sizes:"100x100"}]:[]})}catch(e){}}
+  document.querySelectorAll(".row").forEach(function(r){r.classList.remove("on")});
+}
+function step(d){if(queue.length)play((idx+d+queue.length)%queue.length)}
+function toggle(){au.paused?au.play():au.pause()}
+function sheet(o){$("sheet").classList.toggle("show",!!o)}
+au.onplay=au.onpause=function(){var s=au.paused?"▶":"⏸";$("mpp").textContent=$("bpp").textContent=s};
+au.onended=function(){step(1)};
+au.ontimeupdate=function(){if(au.duration){$("seek").value=au.currentTime/au.duration*1000;$("tc").textContent=fmt(au.currentTime);$("td").textContent=fmt(au.duration)}};
+$("seek").oninput=function(){if(au.duration)au.currentTime=$("seek").value/1000*au.duration};
+if("mediaSession" in navigator){var m=navigator.mediaSession;
+ [["play",function(){au.play()}],["pause",function(){au.pause()}],["previoustrack",function(){step(-1)}],["nexttrack",function(){step(1)}],["seekto",function(d){au.currentTime=d.seekTime}]].forEach(function(a){try{m.setActionHandler(a[0],a[1])}catch(e){}})}
+document.querySelectorAll(".nav button").forEach(function(b){b.onclick=function(){go(b.dataset.t)}});
+$("gok").onclick=function(){$("greet").classList.remove("show")};
+$("ncancel").onclick=function(){$("addm").classList.remove("show")};
+$("nsave").onclick=function(){var n=$("nn").value.trim();if(!n)return;profiles.push({n:n,c:$("nc").value,k:"c"});
+ try{localStorage.setItem("piplup_extra",JSON.stringify(profiles.slice(3)))}catch(e){}
+ $("nn").value="";$("addm").classList.remove("show");pick()};
+pick();
+</script>
+</body>
+</html>
